@@ -1,9 +1,8 @@
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet,Image,View,Text,TouchableOpacity} from 'react-native'
 
 export default function Index({navigation}) {
-    return (
+  return (
     <View style={styles.container}>
         <View style={styles.imageBanner}>
         <Image
@@ -26,7 +25,7 @@ export default function Index({navigation}) {
             <Text style={styles.textRL} >Register</Text>
         </TouchableOpacity>
       </View>
-    )
+  )
 }
 
 const styles = StyleSheet.create({
@@ -82,6 +81,7 @@ const styles = StyleSheet.create({
         backgroundColor:'rgba(255, 85, 85, 1)',
         width:310,
         height:40,
+        marginBottom:30,
         padding:'10px',
         justifyContent:'center',
         alignItems:'center',

@@ -1,23 +1,48 @@
 import { Text,SafeAreaView, StyleSheet,Image, View,TextInput,TouchableOpacity } from 'react-native'
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Register({navigation}) {
 
-  const [register,setRegister]= useState({
-    fullname:'',
+  const [form,setForm]= useState({
+    firstName:'',
     email:'',
     password:'',
   })
 
-  const handleRegister =()=>{
-    alert('regis success')
-  }
+
 
   const handleOnChange =(item,value)=>{
-    setRegister({
-      ...register,
+    setForm({
+      ...form,
       [item]:value,
     })
+  }
+  const handleRegister = async ()=>{
+    try {
+      const config={
+        headers:{
+          'Content-type':'application/json'
+        },
+      }
+      const body = JSON.stringify(form);
+      
+      const response = await axios.post('https://api.kontenbase.com/query/api/v1/fbf9b4af-bf38-4f99-9815-a318d90a372a/auth/register',body,config);
+      console.log(response);
+
+      if(response){
+        await AsyncStorage.setItem('token', response.data.token);
+      }
+
+      const value = await AsyncStorage.getItem('token');
+      if(value !== null){
+      console.log(value)
+      navigation.navigate("Login")
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
     return (
       <View style={styles.container}>
@@ -34,21 +59,21 @@ export default function Register({navigation}) {
           <TextInput
           style={styles.input}
           placeholder="Name"
-          onChangeText={(value)=>handleOnChange('fullName',value)}
-          value={register.fullName}
+          onChangeText={(value)=>handleOnChange('firstName',value)}
+          value={form.firstName}
           />
           <TextInput
           style={styles.input}
           placeholder="Email"
           keyboardType="email-address"
           onChangeText={(value)=>handleOnChange('email',value)}
-          value={register.email}
+          value={form.email}
           />
           <TextInput
           style={styles.input}
           placeholder="Password"
           onChangeText={(value)=>handleOnChange('password',value)}
-          value={register.password}
+          value={form.password}
           />
 
         </SafeAreaView>
@@ -124,12 +149,12 @@ const styles = StyleSheet.create({
 },textRL:{
   color:'white',
   fontSize:'16px',
-  fontWeight:500
+  fontWeight:800
 },
   textRGB:{
     color:'white',
     fontSize:'16px',
-    fontWeight:500
+    fontWeight:800
   },placeholder:{
     // fontColor:'rgba(153, 153, 153, 1)'
   }

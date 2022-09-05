@@ -1,11 +1,47 @@
 import { Text,SafeAreaView, StyleSheet,Image, View,TextInput,TouchableOpacity } from 'react-native'
-import React, { Component } from 'react'
+import React, { useState }  from 'react'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const handleLogin =()=>{
-  alert('login success')
-}
 
 export default function Login({navigation}) {
+  const [form,setForm] = useState({
+    email:'',
+    password:'',
+  })
+
+  const handleOnChange=(item,value)=>{
+    setForm({
+      ...form,
+      [item]:value,
+    })
+  }
+
+  const handleLogin = async()=>{
+    try {
+      const config={
+        headers:{
+          'content-type':'application/json'
+        },
+      }
+      const body = JSON.stringify(form)
+
+      const response = await axios.post('https://api.kontenbase.com/query/api/v1/fbf9b4af-bf38-4f99-9815-a318d90a372a/auth/login',body,config)
+    console.log(response)
+
+    if(response){
+      await AsyncStorage.setItem('token',response.data.token)
+    }
+
+    const value = await AsyncStorage.getItem('token');
+    if(value){
+      navigation.navigate("Tabs")
+    }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
       <View style={styles.container}>
         <View style={styles.imageBanner}>
@@ -21,16 +57,20 @@ export default function Login({navigation}) {
           <TextInput
           placeholder="Email"
           keyboardType="email-address"
+          onChangeText={(value)=>handleOnChange('email',value)}
+          value={form.email}
           style={styles.input}
           />
           <TextInput
           placeholder="Password"
+          onChangeText={(value)=>handleOnChange('password',value)}
+          value={form.password}
           style={styles.input}
           />
         </SafeAreaView>
         <TouchableOpacity
         onPress={handleLogin}
-        style={styles.buttonRG}>  
+        style={styles.buttonRG}>
             <Text style={styles.textRGB}  >Login</Text>
         </TouchableOpacity>
         <Text> New Users?
@@ -92,7 +132,7 @@ const styles = StyleSheet.create({
   textRGB:{
     color:'white',
     fontSize:'16px',
-    fontWeight:500
+    fontWeight:800
   },placeholder:{
     // fontColor:'rgba(153, 153, 153, 1)'
   }

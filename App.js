@@ -1,29 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer,StackActions } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // component
 import Index from './src/screens/Index';
 import Login from './src/screens/Login';
 import Register from './src/screens/Register';
-import Lists_todo from './src/screens/Lists_todo';
-import Add_category from './src/screens/Add_category';
-import MyTab from './src/components/tabs';
-// import Add_list from './src/screens/Add_list';
-// import Detail_list from './src/screens/Detail_list.jsx'
 import Tabs from './src/components/Tabs'
+import Detail_list from './src/screens/Detail_list';
 //bottom tab navigator
 const Stack = createStackNavigator();
 
 export default function App() {
     return (
-      <NavigationContainer
-      
-      >
-         <Stack.Navigator  initialRouteName='Lists_todo'>
-           <Stack.Screen
+      <NavigationContainer>
+        <Stack.Navigator  initialRouteName='Tabs'>
+        {/* <Stack.Navigator> */}
+          <Stack.Screen
           name="LandingPage"
           component={Index}
           options={{headerShown:false}}/>
@@ -38,14 +31,17 @@ export default function App() {
           component={Register}
           options={{headerShown:false}}/>
 
-          <Stack.Screen 
-          name="Lists_todo" 
-          component={MyTab}
-          options={{headerShown:false}}
+          <Stack.Screen
+          name="Tabs"
+          component={Tabs}
+          options={{headerShown:false}}/>
+
+          <Stack.Screen
+          name="Detail List"
+          component={Detail_list}
           />
         </Stack.Navigator>
       </NavigationContainer>
-    
   );
 }
 
